@@ -18,7 +18,7 @@ var prodPlugins = [
   new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
 ]
 
-var commonEntry = ['./publicPath.es6']
+var commonEntry = ['./publicPath.es6', './polyfills.es6']
 // webpack's configuration
 module.exports = {
   entry: {
