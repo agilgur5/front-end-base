@@ -1,3 +1,3 @@
 // polyfills for older browsers
-import 'core-js/fn/promise'
+import '@babel/polyfill'
 import 'isomorphic-fetch'
