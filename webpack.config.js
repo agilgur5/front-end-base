@@ -17,11 +17,7 @@ module.exports = {
       // use ! to chain loaders; note that the first loader is rightmost (RtL)
       {
         test: /\.es6$/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react', 'stage-1'],
-          plugins: ['transform-decorators-legacy']
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.pcss$/,
