@@ -1,20 +1,3 @@
-// webpack.config.js
-
-var webpack = require('webpack')
-var path = require('path')
-
-// array of plugins to optimize a production build
-var prodPlugins = [
-  // certain modules, like React, have differing dev and prod builds
-  new webpack.EnvironmentPlugin(['NODE_ENV']),
-  // optimize the ordering of often used modules in the bundle
-  new webpack.optimize.OccurrenceOrderPlugin(),
-  // attempt to dedupe any duplicated modules between dependencies
-  new webpack.optimize.DedupePlugin(),
-  // and finally, minify the JS, with no warnings about dead code
-  new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
-]
-
 var commonEntry = ['./publicPath.es6', './polyfills.es6']
 // webpack's configuration
 module.exports = {
@@ -22,18 +5,15 @@ module.exports = {
     main: commonEntry.concat('./main.es6')
   },
   output: {
-    path: './build', // where builds go
+    path: __dirname + '/build', // where builds go
     filename: '[name].bundle.js'
-  },
-  resolveLoader: {
-    modulesDirectories: ['node_modules']
   },
   resolve: {
     // resolve from package root as well, so utils/... , etc works
-    root: path.resolve('./')
+    modules: [__dirname, 'node_modules']
   },
   module: {
-    loaders: [
+    rules: [
       // use ! to chain loaders; note that the first loader is rightmost (RtL)
       { test: /\.es6$/, loader: 'babel-loader', query: {
         presets: ['es2015', 'react', 'stage-1'],
@@ -48,6 +28,5 @@ module.exports = {
       { test: /\.(png|jpg|svg|gif)$/, loader: 'url-loader?limit=8192' }
     ]
   },
-  // set plugins based on current environment
-  plugins: process.env.NODE_ENV === 'production' ? prodPlugins : [],
+  mode: process.env.NODE_ENV
 }
