@@ -2,9 +2,6 @@
 
 var webpack = require('webpack')
 var path = require('path')
-var postcssImport = require('postcss-import')
-var cssnext = require('postcss-cssnext')
-var rucksack = require('rucksack-css')
 
 // array of plugins to optimize a production build
 var prodPlugins = [
@@ -53,7 +50,4 @@ module.exports = {
   },
   // set plugins based on current environment
   plugins: process.env.NODE_ENV === 'production' ? prodPlugins : [],
-  postcss: function (webpack) {
-    return [cssnext(), rucksack(), postcssImport({addDependencyTo: webpack})]
-  }
 }
