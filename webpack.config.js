@@ -18,10 +18,11 @@ var prodPlugins = [
   new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
 ]
 
+var commonEntry = ['./publicPath.es6']
 // webpack's configuration
 module.exports = {
   entry: {
-    main: './main.es6'
+    main: commonEntry.concat('./main.es6')
   },
   output: {
     path: './build', // where builds go
@@ -31,7 +32,8 @@ module.exports = {
     modulesDirectories: ['node_modules']
   },
   resolve: {
-    root: path.resolve('./') // resolve from package root as well
+    // resolve from package root as well, so utils/... , etc works
+    root: path.resolve('./')
   },
   module: {
     loaders: [
