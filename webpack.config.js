@@ -42,6 +42,16 @@ module.exports = {
       {
         test: /\.(png|jpg|svg|gif)$/,
         loader: 'url-loader?limit=8192'
+      },
+      // fonts should normally be loaded by URL/CDN, but config if needed
+      {
+        test: /\.(ttf|eot|woff|woff2|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'fonts/',
+          publicPath: './build/fonts/'
+        }
       }
     ]
   },
