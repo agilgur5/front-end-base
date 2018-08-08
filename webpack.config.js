@@ -1,5 +1,6 @@
 var path = require('path')
 
+var isProd = process.env.NODE_ENV === 'production'
 var commonEntry = ['./publicPath.js', './polyfills.js']
 // webpack's configuration
 module.exports = {
@@ -20,7 +21,8 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        options: { cacheDirectory: !isProd } // only cache in development
       },
       {
         test: /\.pcss$/,
