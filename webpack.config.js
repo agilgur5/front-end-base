@@ -1,10 +1,10 @@
 var path = require('path')
 
-var commonEntry = ['./publicPath.es6', './polyfills.es6']
+var commonEntry = ['./publicPath.js', './polyfills.js']
 // webpack's configuration
 module.exports = {
   entry: {
-    main: commonEntry.concat('./main.es6')
+    main: commonEntry.concat('./main.js')
   },
   output: {
     path: path.join(__dirname, '/build'), // where builds go
@@ -18,7 +18,8 @@ module.exports = {
     rules: [
       // use ! to chain loaders; note that the first loader is rightmost (RtL)
       {
-        test: /\.es6$/,
+        test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader'
       },
       {
