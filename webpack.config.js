@@ -1,3 +1,5 @@
+var path = require('path')
+
 var commonEntry = ['./publicPath.es6', './polyfills.es6']
 // webpack's configuration
 module.exports = {
@@ -5,7 +7,7 @@ module.exports = {
     main: commonEntry.concat('./main.es6')
   },
   output: {
-    path: __dirname + '/build', // where builds go
+    path: path.join(__dirname, '/build'), // where builds go
     filename: '[name].bundle.js'
   },
   resolve: {
