@@ -2,8 +2,11 @@ var path = require('path')
 
 var isProd = process.env.NODE_ENV === 'production'
 var commonEntry = ['./publicPath.js', './polyfills.js']
+
 // webpack's configuration
 module.exports = {
+  // setting NODE_ENV does _not_ automatically set mode
+  mode: isProd ? 'production' : 'development',
   entry: {
     main: commonEntry.concat('./main.js')
   },
@@ -56,6 +59,5 @@ module.exports = {
         }
       }
     ]
-  },
-  mode: process.env.NODE_ENV
+  }
 }
