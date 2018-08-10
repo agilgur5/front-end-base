@@ -1,7 +1,7 @@
 var path = require('path')
 
 var isProd = process.env.NODE_ENV === 'production'
-var commonEntry = ['./config/showBuildErrors.js', './config/publicPath.js',
+var commonEntry = ['webpack-serve-overlay/onlyIfProduction', './config/publicPath.js',
   './config/polyfills.js']
 var outputDir = 'build/'
 
