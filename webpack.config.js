@@ -1,7 +1,8 @@
 var path = require('path')
 
 var isProd = process.env.NODE_ENV === 'production'
-var commonEntry = ['./publicPath.js', './polyfills.js']
+var commonEntry = ['./showBuildErrors.js', './publicPath.js', './polyfills.js']
+var outputDir = 'build/'
 
 // webpack's configuration
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
     main: commonEntry.concat('./main.js')
   },
   output: {
-    path: path.join(__dirname, '/build'), // where builds go
+    path: path.join(__dirname, outputDir), // where builds go
     filename: '[name].bundle.js'
   },
   resolve: {
@@ -55,9 +56,35 @@ module.exports = {
         options: {
           name: '[name].[ext]',
           outputPath: 'fonts/',
-          publicPath: './build/fonts/'
+          // must set publicPath to route to build/fonts/ instead of fonts/
+          // see https://github.com/webpack-contrib/file-loader/pull/246
+          publicPath: outputDir + 'fonts/'
         }
       }
     ]
+  }
+}
+
+var webpackServeWaitpage = require('webpack-serve-waitpage')
+// webpack-serve configuration
+module.exports.serve = {
+  mode: 'development', // only use for development
+  devMiddleware: {
+    // MUST be set to not be routed to /
+    // cannot use relative paths, so must use /build/
+    // see https://github.com/webpack/webpack-dev-middleware/issues/269
+    publicPath: '/' + outputDir
+  },
+  add: (app, middleware, options) => {
+    // must pass options arg from add args
+    // show page on any hot full page reloads as well, not just first bundle
+    app.use(webpackServeWaitpage(options, {disableWhenValid: false}))
+
+    // should come after waitpage
+    // must use .then() to avoid race conditions
+    // see https://github.com/webpack-contrib/webpack-serve/issues/238
+    middleware.webpack().then(() => {
+      middleware.content()
+    })
   }
 }
