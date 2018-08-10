@@ -1,7 +1,8 @@
 var path = require('path')
 
 var isProd = process.env.NODE_ENV === 'production'
-var commonEntry = ['./showBuildErrors.js', './publicPath.js', './polyfills.js']
+var commonEntry = ['./config/showBuildErrors.js', './config/publicPath.js',
+  './config/polyfills.js']
 var outputDir = 'build/'
 
 // webpack's configuration
