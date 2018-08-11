@@ -35,7 +35,7 @@
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14",
     "webpack-serve": "^2.0.2",
-    "webpack-serve-overlay": "github:agilgur5/webpack-serve-overlay#only-if-production",
+    "webpack-serve-overlay": "^0.3.0",
     "webpack-serve-waitpage": "^1.0.1"
   },
   "scripts": {

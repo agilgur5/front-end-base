@@ -11,7 +11,8 @@ module.exports = {
   // setting NODE_ENV does _not_ automatically set mode
   mode: isProd ? 'production' : 'development',
   entry: {
-    errorOverlay: 'webpack-serve-overlay/onlyIfProduction',
+    // don't include errorOverlay in production
+    ...(isProd ? {} : {errorOverlay: 'webpack-serve-overlay'}),
     main: commonEntry.concat('./main.js')
   },
   output: {
