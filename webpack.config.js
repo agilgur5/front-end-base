@@ -1,8 +1,7 @@
 var path = require('path')
 
 var isProd = process.env.NODE_ENV === 'production'
-var commonEntry = ['webpack-serve-overlay/onlyIfProduction', './config/publicPath.js',
-  './config/polyfills.js']
+var commonEntry = ['./config/publicPath.js', './config/polyfills.js']
 var outputDir = 'build/'
 
 // webpack's configuration
@@ -10,6 +9,7 @@ module.exports = {
   // setting NODE_ENV does _not_ automatically set mode
   mode: isProd ? 'production' : 'development',
   entry: {
+    errorOverlay: 'webpack-serve-overlay/onlyIfProduction',
     main: commonEntry.concat('./main.js')
   },
   output: {
