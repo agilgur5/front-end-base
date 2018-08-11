@@ -1,10 +1,10 @@
-var path = require('path')
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-var HTMLPlugin = require('html-webpack-plugin')
+const path = require('path')
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const HTMLPlugin = require('html-webpack-plugin')
 
-var isProd = process.env.NODE_ENV === 'production'
-var commonEntry = ['./config/publicPath.js', './config/polyfills.js']
-var outputDir = 'build/'
+const isProd = process.env.NODE_ENV === 'production'
+const commonEntry = ['./config/publicPath.js', './config/polyfills.js']
+const outputDir = 'build/'
 
 // webpack's configuration
 module.exports = {
@@ -77,7 +77,7 @@ module.exports = {
   ]
 }
 
-var webpackServeWaitpage = require('webpack-serve-waitpage')
+const webpackServeWaitpage = require('webpack-serve-waitpage')
 // webpack-serve configuration
 module.exports.serve = {
   mode: 'development', // only use for development
@@ -87,16 +87,15 @@ module.exports.serve = {
     // see https://github.com/webpack/webpack-dev-middleware/issues/269
     publicPath: '/' + outputDir
   },
-  add: (app, middleware, options) => {
+  add: async (app, middleware, options) => {
     // must pass options arg from add args
     // show page on any hot full page reloads as well, not just first bundle
     app.use(webpackServeWaitpage(options, {disableWhenValid: false}))
 
     // should come after waitpage
-    // must use .then() to avoid race conditions
+    // must use await to avoid race conditions
     // see https://github.com/webpack-contrib/webpack-serve/issues/238
-    middleware.webpack().then(() => {
-      middleware.content()
-    })
+    await middleware.webpack()
+    middleware.content()
   }
 }
