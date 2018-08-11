@@ -1,4 +1,5 @@
 var path = require('path')
+var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 
 var isProd = process.env.NODE_ENV === 'production'
 var commonEntry = ['./config/publicPath.js', './config/polyfills.js']
@@ -63,7 +64,10 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new CaseSensitivePathsPlugin()
+  ]
 }
 
 var webpackServeWaitpage = require('webpack-serve-waitpage')
