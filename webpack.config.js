@@ -1,5 +1,6 @@
 var path = require('path')
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+var HTMLPlugin = require('html-webpack-plugin')
 
 var isProd = process.env.NODE_ENV === 'production'
 var commonEntry = ['./config/publicPath.js', './config/polyfills.js']
@@ -15,7 +16,9 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, outputDir), // where builds go
-    filename: '[name].bundle.js'
+    // can only use hash in development
+    filename: isProd
+      ? '[name].bundle.[contenthash].js' : '[name].bundle.[hash].js'
   },
   resolve: {
     // resolve from package root as well, so utils/... , etc works
@@ -66,7 +69,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new CaseSensitivePathsPlugin()
+    new CaseSensitivePathsPlugin(),
+    new HTMLPlugin({
+      template: 'index.html.ejs'
+    })
   ]
 }
 
