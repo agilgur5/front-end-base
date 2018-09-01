@@ -77,8 +77,11 @@ module.exports = {
   ]
 }
 
-const webpackServeWaitpage = require('webpack-serve-waitpage')
 // webpack-serve configuration
+const waitpage = require('webpack-serve-waitpage')
+const convert = require('koa-connect')
+const proxy = require('http-proxy-middleware')
+
 module.exports.serve = {
   mode: 'development', // only use for development
   devMiddleware: {
@@ -90,12 +93,15 @@ module.exports.serve = {
   add: async (app, middleware, options) => {
     // must pass options arg from add args
     // show page on any hot full page reloads as well, not just first bundle
-    app.use(webpackServeWaitpage(options, {disableWhenValid: false}))
+    app.use(waitpage(options, {disableWhenValid: false}))
 
     // should come after waitpage
     // must use await to avoid race conditions
     // see https://github.com/webpack-contrib/webpack-serve/issues/238
     await middleware.webpack()
-    middleware.content()
+    await middleware.content()
+
+    // proxy all other requests to back-end
+    app.use(convert(proxy('/', { target: 'http://localhost:8081' })))
   }
 }
