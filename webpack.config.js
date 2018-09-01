@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const path = require('path')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const HTMLPlugin = require('html-webpack-plugin')
@@ -17,9 +18,8 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, outputDir), // where builds go
-    // can only use hash in development
-    filename: isProd
-      ? '[name].bundle.[contenthash].js' : '[name].bundle.[hash].js'
+    // `hash` is the only option available in development
+    filename: '[name].bundle.[' + (isProd ? 'contenthash' : 'hash') + '].js'
   },
   resolve: {
     // resolve from package root as well, so utils/... , etc works
@@ -73,8 +73,25 @@ module.exports = {
     new CaseSensitivePathsPlugin(),
     new HTMLPlugin({
       template: 'index.html.ejs'
-    })
-  ]
+    }),
+    // base module.id on hash instead of order index
+    new webpack.HashedModuleIdsPlugin() // only run in prod if per is an issue
+  ],
+  // only run this for production if perf becomes an issue
+  optimization: {
+    // split webpack's boilerplate code into separate chunk for better caching
+    runtimeChunk: 'single',
+    // split vendored code into separate chunk for same reasons
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /node_modules/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  }
 }
 
 // webpack-serve configuration
