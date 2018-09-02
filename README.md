@@ -15,7 +15,7 @@ II. [Further Reading](#further-reading)
 
 ### Installing
 
-```
+```bash
 npm install
 ```
 
@@ -26,7 +26,7 @@ See the [`maidfile`](maidfile.md) for a list of tasks available
 ### Installing New Packages
 
 1. `npm i -D <package_name>` will install and save a package as a dev dependency
-  - `npm i -S <package_name>` will install and save a package as a prod dependency
+    - `npm i -S <package_name>` will install and save a package as a prod dependency
 1. `import` the package where needed in the code
 
 ## Further Reading
