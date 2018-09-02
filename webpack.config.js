@@ -12,9 +12,11 @@ module.exports = {
   // setting NODE_ENV does _not_ automatically set mode
   mode: isProd ? 'production' : 'development',
   entry: {
+    // entry that will be hot-reloaded must come first
+    // see https://github.com/webpack-contrib/webpack-serve/issues/119#issuecomment-401502247
+    main: commonEntry.concat('./main.js'),
     // don't include errorOverlay in production
-    ...(isProd ? {} : {errorOverlay: 'webpack-serve-overlay'}),
-    main: commonEntry.concat('./main.js')
+    ...(isProd ? {} : {errorOverlay: 'webpack-serve-overlay'})
   },
   output: {
     path: path.join(__dirname, outputDir), // where builds go
