@@ -21,13 +21,7 @@ npm install
 
 ### Using the Environment
 
-1. `npm run build:hmr` will run a [`webpack-serve`](https://github.com/webpack-contrib/webpack-serve) Node server
-  - This will rebundle and hot-reload the app whenever the source files change. The app will be served from memory at [localhost:8080](http://localhost:8080)
-  - <small>For a slower alternative that doesn't hot-reload, one can run `npm run build:watch` to output the bundle to disk on changes</small>
-
-### Creating a Production Build
-
-1. `npm run deploy` will clean the build folder and then output a production bundle with `npm run build:prod`
+See the [`maidfile`](maidfile.md) for a list of tasks available
 
 ### Installing New Packages
 
