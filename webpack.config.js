@@ -41,15 +41,17 @@ module.exports = {
         loader: 'style-loader!css-loader!postcss-loader'
       },
       {
-        test: /\.pcssm$/,
+        test: /\.module\.pcss$/,
+        exclude: /\.module\.pcss$/,
         loader: 'style-loader!css-loader?modules&importLoaders=1!postcss-loader'
       },
       {
         test: /\.css$/,
+        exclude: /\.module\.css$/,
         loader: 'style-loader!css-loader'
       },
       {
-        test: /\.cssm$/,
+        test: /\.module\.css$/,
         loader: 'style-loader!css-loader?modules'
       },
       // inline base64 URLs for <=8k images, direct URLs for the rest
