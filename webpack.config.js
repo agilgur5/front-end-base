@@ -7,6 +7,14 @@ const isProd = process.env.NODE_ENV === 'production'
 const commonEntry = ['./config/publicPath.js', './config/polyfills.js']
 const outputDir = 'build/'
 
+const CSSModulesConfig = {
+  loader: 'css-loader',
+  options: {
+    modules: true,
+    localIdentName: '[path][name]__[local]--[hash:base64:5]'
+  }
+}
+
 // webpack's configuration
 module.exports = {
   // setting NODE_ENV does _not_ automatically set mode
@@ -43,7 +51,12 @@ module.exports = {
       {
         test: /\.module\.pcss$/,
         exclude: /\.module\.pcss$/,
-        loader: 'style-loader!css-loader?modules&importLoaders=1!postcss-loader'
+        use: [{
+          loader: 'style-loader'
+        }, {
+          ...CSSModulesConfig,
+          options: {...CSSModulesConfig.options, importsLoaders: 1}
+        }, {loader: 'postcss-loader'}]
       },
       {
         test: /\.css$/,
@@ -52,7 +65,9 @@ module.exports = {
       },
       {
         test: /\.module\.css$/,
-        loader: 'style-loader!css-loader?modules'
+        use: [{
+          loader: 'style-loader'
+        }, CSSModulesConfig]
       },
       // inline base64 URLs for <=8k images, direct URLs for the rest
       {
