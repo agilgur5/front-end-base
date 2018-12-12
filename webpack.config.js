@@ -4,7 +4,9 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const HTMLPlugin = require('html-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
-const commonEntry = ['./config/publicPath.js', './config/polyfills.js']
+const commonEntry = ['./config/polyfills.js']
+// SHOULD BE equivalent to utils/settings.js
+const STATIC_URL = '/' + (isProd ? 'static/' : '')
 const outputDir = 'build/'
 
 const CSSModulesConfig = {
@@ -28,6 +30,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, outputDir), // where builds go
+    publicPath: STATIC_URL + outputDir,
     // `hash` is the only option available in development
     filename: '[name].bundle.[' + (isProd ? 'contenthash' : 'hash') + '].js'
   },
