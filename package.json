@@ -4,7 +4,7 @@
   "description": "Base files from which to start a front-end app",
   "main": "main.js",
   "engines": {
-    "node": "^8.4.0",
+    "node": "^8.9.0",
     "npm": "^6.1.0"
   },
   "dependencies": {
@@ -24,7 +24,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-imports": "^1.5.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
-    "css-loader": "^0.28.11",
+    "css-loader": "^3.2.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "http-proxy-middleware": "^0.19.0",
