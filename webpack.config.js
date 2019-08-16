@@ -47,11 +47,11 @@ module.exports = {
       },
       {
         test: /\.pcss$/,
+        exclude: /\.module\.pcss$/,
         loader: 'style-loader!css-loader!postcss-loader'
       },
       {
         test: /\.module\.pcss$/,
-        exclude: /\.module\.pcss$/,
         use: [{
           loader: 'style-loader'
         }, {
