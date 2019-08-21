@@ -2,9 +2,13 @@ const webpack = require('webpack')
 const path = require('path')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const HTMLPlugin = require('html-webpack-plugin')
+const { WebpackPluginServe } = require('webpack-plugin-serve')
 
 const isProd = process.env.NODE_ENV === 'production'
 const commonEntry = ['./config/publicPath.js', './config/polyfills.js']
+// https://github.com/shellscape/webpack-plugin-serve/blob/master/recipes/entry-points.md
+// don't include the serve client in production
+if (!isProd) { commonEntry.push('webpack-plugin-serve/client') }
 const outputDir = 'build/'
 
 const CSSModulesConfig = {
@@ -21,11 +25,7 @@ module.exports = {
   // setting NODE_ENV does _not_ automatically set mode
   mode: isProd ? 'production' : 'development',
   entry: {
-    // entry that will be hot-reloaded must come first
-    // see https://github.com/webpack-contrib/webpack-serve/issues/119#issuecomment-401502247
-    main: commonEntry.concat('./main.js'),
-    // don't include errorOverlay in production
-    ...(isProd ? {} : {errorOverlay: 'webpack-serve-overlay'})
+    main: commonEntry.concat('./main.js')
   },
   output: {
     path: path.join(__dirname, outputDir), // where builds go
@@ -97,7 +97,18 @@ module.exports = {
       template: 'index.html.ejs'
     }),
     // base module.id on hash instead of order index
-    new webpack.HashedModuleIdsPlugin() // only run in prod if per is an issue
+    new webpack.HashedModuleIdsPlugin(), // only run in prod if perf is an issue
+    // don't include serve in production
+    ...(isProd ? [] : [new WebpackPluginServe({
+      middleware: (app, builtins) => {
+        builtins.static('.')
+        // proxy all other requests to back-end
+        // proxy must be wrapped in app.use(): https://github.com/shellscape/webpack-plugin-serve/issues/151
+        app.use(builtins.proxy('/', { target: 'http://localhost:8081' }))
+      }
+      // currently throwing an error: https://github.com/shellscape/webpack-plugin-serve/issues/152
+      // ramdisk: true // development build perf optimization
+    })])
   ],
   // only run this for production if perf becomes an issue
   optimization: {
@@ -113,34 +124,5 @@ module.exports = {
         }
       }
     }
-  }
-}
-
-// webpack-serve configuration
-const waitpage = require('webpack-serve-waitpage')
-const convert = require('koa-connect')
-const proxy = require('http-proxy-middleware')
-
-module.exports.serve = {
-  mode: 'development', // only use for development
-  devMiddleware: {
-    // MUST be set to not be routed to /
-    // cannot use relative paths, so must use /build/
-    // see https://github.com/webpack/webpack-dev-middleware/issues/269
-    publicPath: '/' + outputDir
-  },
-  add: async (app, middleware, options) => {
-    // must pass options arg from add args
-    // show page on any hot full page reloads as well, not just first bundle
-    app.use(waitpage(options, {disableWhenValid: false}))
-
-    // should come after waitpage
-    // must use await to avoid race conditions
-    // see https://github.com/webpack-contrib/webpack-serve/issues/238
-    await middleware.webpack()
-    await middleware.content()
-
-    // proxy all other requests to back-end
-    app.use(convert(proxy('/', { target: 'http://localhost:8081' })))
   }
 }
