@@ -56,8 +56,10 @@ module.exports = {
           loader: 'style-loader'
         }, {
           ...CSSModulesConfig,
-          options: {...CSSModulesConfig.options, importsLoaders: 1}
-        }, {loader: 'postcss-loader'}]
+          options: { ...CSSModulesConfig.options, importsLoaders: 1 }
+        }, {
+          loader: 'postcss-loader'
+        }]
       },
       {
         test: /\.css$/,
