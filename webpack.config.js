@@ -105,9 +105,10 @@ module.exports = {
         // proxy all other requests to back-end
         // proxy must be wrapped in app.use(): https://github.com/shellscape/webpack-plugin-serve/issues/151
         app.use(builtins.proxy('/', { target: 'http://localhost:8081' }))
-      }
+      },
       // currently throwing an error: https://github.com/shellscape/webpack-plugin-serve/issues/152
-      // ramdisk: true // development build perf optimization
+      ramdisk: true, // development build perf optimization
+      log: { level: 'debug' }
     })])
   ],
   // only run this for production if perf becomes an issue
